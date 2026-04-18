@@ -54,122 +54,135 @@ function Register() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-500 to-green-600 flex items-center justify-center p-4">
-      <div className="bg-white rounded-lg shadow-lg p-8 w-full max-w-md max-h-screen overflow-y-auto">
-        <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center">Register</h2>
-        
+    <div className="min-h-screen bg-black flex items-center justify-center p-4">
+      <div className="w-full max-w-md max-h-screen overflow-y-auto">
+        {/* Header */}
+        <div className="text-center mb-8">
+          <h1 className="text-4xl font-bold text-white mb-2">Create Account</h1>
+          <p className="text-gray-400">Register to get started</p>
+        </div>
+
+        {/* Error Message */}
         {error && (
-          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+          <div className="bg-red-900 border border-red-700 text-red-200 px-4 py-3 rounded-lg mb-6">
             {error}
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="space-y-3">
+        <form onSubmit={handleSubmit} className="space-y-4">
+          {/* Full Name */}
           <div>
-            <label className="block text-gray-700 font-semibold mb-1 text-sm">Full Name</label>
+            <label className="block text-white font-semibold mb-2 text-sm">Full Name</label>
             <input
               type="text"
               name="name"
               value={formData.name}
               onChange={handleChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-green-500"
+              className="w-full px-4 py-3 bg-gray-900 border border-gray-700 text-white rounded-lg text-sm focus:outline-none focus:border-gray-500 placeholder-gray-600"
               placeholder="Enter your name"
               required
             />
           </div>
 
+          {/* Email */}
           <div>
-            <label className="block text-gray-700 font-semibold mb-1 text-sm">Email</label>
+            <label className="block text-white font-semibold mb-2 text-sm">Email</label>
             <input
               type="email"
               name="email"
               value={formData.email}
               onChange={handleChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-green-500"
+              className="w-full px-4 py-3 bg-gray-900 border border-gray-700 text-white rounded-lg text-sm focus:outline-none focus:border-gray-500 placeholder-gray-600"
               placeholder="Enter your email"
               required
             />
           </div>
 
+          {/* Password */}
           <div>
-            <label className="block text-gray-700 font-semibold mb-1 text-sm">Password</label>
+            <label className="block text-white font-semibold mb-2 text-sm">Password</label>
             <input
               type="password"
               name="password"
               value={formData.password}
               onChange={handleChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-green-500"
-              placeholder="Enter your password"
+              className="w-full px-4 py-3 bg-gray-900 border border-gray-700 text-white rounded-lg text-sm focus:outline-none focus:border-gray-500 placeholder-gray-600"
+              placeholder="Create a password"
               required
             />
           </div>
 
+          {/* Age */}
           <div>
-            <label className="block text-gray-700 font-semibold mb-1 text-sm">Age</label>
+            <label className="block text-white font-semibold mb-2 text-sm">Age</label>
             <input
               type="number"
               name="age"
               value={formData.age}
               onChange={handleChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-green-500"
+              className="w-full px-4 py-3 bg-gray-900 border border-gray-700 text-white rounded-lg text-sm focus:outline-none focus:border-gray-500 placeholder-gray-600"
               placeholder="Enter your age"
             />
           </div>
 
+          {/* Role */}
           <div>
-            <label className="block text-gray-700 font-semibold mb-1 text-sm">Role</label>
+            <label className="block text-white font-semibold mb-2 text-sm">Role</label>
             <select
               name="role"
               value={formData.role}
               onChange={handleChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-green-500"
+              className="w-full px-4 py-3 bg-gray-900 border border-gray-700 text-white rounded-lg text-sm focus:outline-none focus:border-gray-500"
             >
               <option value="student">Student</option>
               <option value="admin">Admin</option>
             </select>
           </div>
 
+          {/* Department & Enrollment (conditional) */}
           {formData.role === 'student' && (
             <>
               <div>
-                <label className="block text-gray-700 font-semibold mb-1 text-sm">Department</label>
+                <label className="block text-white font-semibold mb-2 text-sm">Department</label>
                 <input
                   type="text"
                   name="department"
                   value={formData.department}
                   onChange={handleChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-green-500"
+                  className="w-full px-4 py-3 bg-gray-900 border border-gray-700 text-white rounded-lg text-sm focus:outline-none focus:border-gray-500 placeholder-gray-600"
                   placeholder="Enter your department"
                 />
               </div>
 
               <div>
-                <label className="block text-gray-700 font-semibold mb-1 text-sm">Enrollment Number</label>
+                <label className="block text-white font-semibold mb-2 text-sm">Enrollment Number</label>
                 <input
                   type="text"
                   name="enrollmentNumber"
                   value={formData.enrollmentNumber}
                   onChange={handleChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-green-500"
+                  className="w-full px-4 py-3 bg-gray-900 border border-gray-700 text-white rounded-lg text-sm focus:outline-none focus:border-gray-500 placeholder-gray-600"
                   placeholder="Enter your enrollment number"
                 />
               </div>
             </>
           )}
 
+          {/* Register Button */}
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-green-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-green-600 transition disabled:bg-gray-400 mt-4"
+            className="w-full bg-white text-black font-bold py-3 px-4 rounded-lg hover:bg-gray-200 transition disabled:bg-gray-600 mt-6"
           >
             {loading ? 'Registering...' : 'Register'}
           </button>
         </form>
 
-        <p className="text-center text-gray-600 mt-4 text-sm">
+        {/* Sign In Link */}
+        <p className="text-center text-gray-400 mt-6 text-sm">
           Already have an account?{' '}
-          <Link to="/login" className="text-green-500 hover:text-green-600 font-semibold">
-            Login here
+          <Link to="/login" className="text-white font-semibold hover:underline">
+            Sign In
           </Link>
         </p>
       </div>

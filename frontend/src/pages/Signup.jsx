@@ -70,7 +70,7 @@ function Signup() {
       <div className="w-full max-w-md">
         {/* Header */}
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-white mb-2">Create a Tailark Account</h1>
+          <h1 className="text-4xl font-bold text-white mb-2">Create Account</h1>
           <p className="text-gray-400">Welcome! Create an account to get started</p>
         </div>
 
