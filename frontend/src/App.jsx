@@ -5,6 +5,7 @@ import { AuthContext } from './context/AuthContext';
 // Pages
 import Login from './pages/Login';
 import Register from './pages/Register';
+import Signup from './pages/Signup';
 import AdminDashboard from './pages/AdminDashboard';
 import StudentDashboard from './pages/StudentDashboard';
 import ExamPage from './pages/ExamPage';
@@ -41,6 +42,7 @@ function App() {
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/signup" element={<Signup />} />
         
         <Route
           path="/admin/dashboard"
@@ -65,7 +67,7 @@ function App() {
         <Route path="/" element={user ? (
           user.role === 'admin' ? <Navigate to="/admin/dashboard" /> : <Navigate to="/student/dashboard" />
         ) : (
-          <Navigate to="/login" />
+          <Navigate to="/signup" />
         )} />
         
         <Route path="*" element={<NotFound />} />
