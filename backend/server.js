@@ -15,12 +15,33 @@ const verifyToken=require('./middleware/verify')
 const authorizeRole=require('./middleware/authrole')
 const redisClient=require('./config/redis')
 
+const allowedOrigins = [
+    process.env.FRONTEND_URL,
+    'http://localhost:3000',
+    'http://127.0.0.1:3000',
+    'http://localhost:3001',
+    'http://127.0.0.1:3001'
+].filter(Boolean);
+
+const corsOptions = {
+    origin: (origin, callback) => {
+        // Allow non-browser requests and same-origin calls.
+        if (!origin) {
+            return callback(null, true);
+        }
+
+        if (allowedOrigins.includes(origin)) {
+            return callback(null, true);
+        }
+
+        return callback(new Error('Not allowed by CORS'));
+    },
+    credentials: true
+};
+
 app.use(express.json())
 app.use(cookieParser())
-app.use(cors({
-  origin: 'http://localhost:3000',
-  credentials: true
-}))
+app.use(cors(corsOptions))
 
 
 

@@ -7,6 +7,8 @@ const inputvalidator = require("../utils/validators");
 const jwt = require("jsonwebtoken");
 const verifyToken = require('../middleware/verify');
 const redisClient = require('../config/redis');
+const { OAuth2Client } = require('google-auth-library');
+const crypto = require('crypto');
 
 const COOKIE_OPTIONS = {
   httpOnly: true,
@@ -16,6 +18,7 @@ const COOKIE_OPTIONS = {
 
 const TOKEN_TTL_MS = 7 * 24 * 60 * 60 * 1000; // 7 days
 const TOKEN_TTL = '7d';
+const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 // Register Route
 router.post('/register', async (req, res) => {
@@ -76,6 +79,60 @@ router.post('/login', async (req, res) => {
   }
   catch (err) {
     res.status(400).json({ message: err.message || "Login failed", success: false });
+  }
+});
+
+// Google Login Route
+router.post('/google', async (req, res) => {
+  try {
+    if (!process.env.GOOGLE_CLIENT_ID) {
+      return res.status(500).json({ message: 'Google auth is not configured', success: false });
+    }
+
+    const { credential } = req.body;
+    if (!credential) {
+      return res.status(400).json({ message: 'Google credential is required', success: false });
+    }
+
+    const ticket = await googleClient.verifyIdToken({
+      idToken: credential,
+      audience: process.env.GOOGLE_CLIENT_ID,
+    });
+
+    const payload = ticket.getPayload();
+    if (!payload?.email || !payload?.email_verified) {
+      return res.status(400).json({ message: 'Invalid Google account', success: false });
+    }
+
+    let dbUser = await user.findOne({ email: payload.email });
+
+    if (!dbUser) {
+      const randomPassword = crypto.randomBytes(24).toString('hex');
+      const hashedPassword = await hashing(randomPassword);
+
+      dbUser = await user.create({
+        name: payload.name || payload.email.split('@')[0],
+        email: payload.email,
+        password: hashedPassword,
+        role: 'student',
+      });
+    }
+
+    const token = jwt.sign({ email: dbUser.email }, process.env.JWT_KEY, { expiresIn: TOKEN_TTL });
+    res.cookie('token', token, { ...COOKIE_OPTIONS, maxAge: TOKEN_TTL_MS });
+
+    res.json({
+      message: 'Google login successful',
+      success: true,
+      user: {
+        id: dbUser._id,
+        email: dbUser.email,
+        role: dbUser.role,
+        name: dbUser.name,
+      },
+    });
+  } catch (err) {
+    res.status(400).json({ message: err.message || 'Google login failed', success: false });
   }
 });
 
